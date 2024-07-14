@@ -1,7 +1,6 @@
 package ru.petkov.bookcompany.service.client;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.petkov.bookcompany.entity.Book;
 import ru.petkov.bookcompany.entity.Client;
@@ -28,7 +27,10 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client createClient(Client client) {clientRepository.save(client); return client;}
+    public Client createClient(Client client) {
+        clientRepository.save(client);
+        return client;
+    }
 
     @Override
     public void deleteClient(Long id) {
@@ -52,13 +54,13 @@ public class ClientServiceImpl implements ClientService {
     public Book takeBook(Long clientId, Book book) {
         Client byId = clientRepository.findById(clientId).orElseThrow();
         book.setClient(byId);
-        clientBookFacade.createBook(book);
+        clientBookFacade.updateBook(book);
         return book;
     }
 
     @Override
     public Book returnBook(Long clientId, Book book) {
         book.setClient(null);
-        return clientBookFacade.createBook(book);
+        return clientBookFacade.updateBook(book);
     }
 }

@@ -1,9 +1,6 @@
 package ru.petkov.bookcompany.controller;
 
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.petkov.bookcompany.dto.BookDTO;
 import ru.petkov.bookcompany.dto.mapper.BookMapper;
@@ -20,50 +17,50 @@ public class BookController {
 
     private final BookService bookService;
     private final RandomIdFeign randomId;
+    private final BookMapper bookMapper;
 
-    public BookController(BookService bookService, RandomIdFeign randomId) {
+    public BookController(BookService bookService, RandomIdFeign randomId, BookMapper bookMapper) {
         this.bookService = bookService;
         this.randomId = randomId;
+        this.bookMapper = bookMapper;
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<BookDTO>> getAllBooks() {
-        return new ResponseEntity<>(BookMapper.INSTANCE.toBookDTOList(bookService.allBooks()), HttpStatus.OK);
+    public List<BookDTO> getAllBooks() {
+        return bookMapper.toBookDTOList(bookService.allBooks());
     }
 
     @PostMapping("/delete/{id}")
-    public ResponseEntity<String> deleteBook(@PathVariable Long id) {
-      bookService.deleteBook(id);
-      return new ResponseEntity<>("Book was deleted", HttpStatus.OK);
+    public String deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
+        return "Book was deleted";
     }
 
     @PostMapping("/create")
-    public ResponseEntity<BookDTO> createBook(@RequestBody BookDTO bookDTO) {
-        Book book = BookMapper.INSTANCE.toBook(bookDTO);
+    public BookDTO createBook(@RequestBody BookDTO bookDTO) {
+        Book book = bookMapper.toBook(bookDTO);
         book.setRandomId(getRandomId());
         bookService.createBook(book);
-        return new ResponseEntity<>(bookDTO, HttpStatus.CREATED);
+        return bookDTO;
     }
 
     @PostMapping("/update")
-    public ResponseEntity<BookDTO> updateBook(@RequestBody BookDTO bookDTO) {
-        Book book = BookMapper.INSTANCE.toBook(bookDTO);
+    public BookDTO updateBook(@RequestBody BookDTO bookDTO) {
+        Book book = bookMapper.toBook(bookDTO);
         bookService.updateBook(book);
-        return new ResponseEntity<>(bookDTO, HttpStatus.OK);
+        return bookDTO;
     }
 
-    @GetMapping("/id")
     public UUID getRandomId() {
         String json = randomId.getRandomId();
         JSONObject object = new JSONObject(json);
         String uuid = object.get("uuid").toString();
         return UUID.fromString(uuid);
-
     }
 
     @PostMapping("/borrowed/{clientId}")
-    public ResponseEntity<List<BookDTO>> getListBorrowedBooks(@PathVariable Long clientId) {
+    public List<BookDTO> getListBorrowedBooks(@PathVariable Long clientId) {
         List<Book> books = bookService.allBooks().stream().filter(book -> book.getClient().getClientId().equals(clientId)).toList();
-        return new ResponseEntity<>(BookMapper.INSTANCE.toBookDTOList(books), HttpStatus.OK);
+        return bookMapper.toBookDTOList(books);
     }
 }

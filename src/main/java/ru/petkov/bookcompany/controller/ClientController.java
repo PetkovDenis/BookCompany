@@ -1,8 +1,5 @@
 package ru.petkov.bookcompany.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.petkov.bookcompany.dto.BookDTO;
 import ru.petkov.bookcompany.dto.ClientDTO;
@@ -10,7 +7,6 @@ import ru.petkov.bookcompany.dto.mapper.BookMapper;
 import ru.petkov.bookcompany.dto.mapper.ClientMapper;
 import ru.petkov.bookcompany.entity.Book;
 import ru.petkov.bookcompany.entity.Client;
-import ru.petkov.bookcompany.service.book.BookService;
 import ru.petkov.bookcompany.service.client.ClientService;
 import ru.petkov.bookcompany.service.facade.ClientBookFacade;
 
@@ -23,50 +19,53 @@ public class ClientController {
 
     private final ClientService clientService;
     private final ClientBookFacade clientBookFacade;
+    private final ClientMapper clientMapper;
+    private final BookMapper bookMapper;
 
-    public ClientController(ClientService clientService, ClientBookFacade clientBookFacade) {
+    public ClientController(ClientService clientService, ClientBookFacade clientBookFacade, ClientMapper clientMapper, BookMapper bookMapper) {
         this.clientService = clientService;
         this.clientBookFacade = clientBookFacade;
+        this.clientMapper = clientMapper;
+        this.bookMapper = bookMapper;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ClientDTO> save(@RequestBody ClientDTO clientDTO) {
-        Client client = ClientMapper.INSTANCE.toClient(clientDTO);
+    public ClientDTO save(@RequestBody ClientDTO clientDTO) {
+        Client client = clientMapper.toClient(clientDTO);
         clientService.createClient(client);
-        return new ResponseEntity<>(clientDTO, HttpStatus.CREATED);
+        return clientDTO;
     }
+
     @PostMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public String delete(@PathVariable Long id) {
         clientService.deleteClient(id);
-        return new ResponseEntity<>("Client was deleted", HttpStatus.OK);
+        return "Client was deleted";
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<ClientDTO>> getAll() {
+    public List<ClientDTO> getAll() {
         List<Client> clients = clientService.allClients();
-        return new ResponseEntity<>(ClientMapper.INSTANCE.toClientsDTO(clients), HttpStatus.OK);
+        return clientMapper.toClientsDTO(clients);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<ClientDTO> update(@RequestBody ClientDTO clientDTO) {
-        Client client = ClientMapper.INSTANCE.toClient(clientDTO);
+    public ClientDTO update(@RequestBody ClientDTO clientDTO) {
+        Client client = clientMapper.toClient(clientDTO);
         clientService.updateClient(client);
-        return new ResponseEntity<>(clientDTO, HttpStatus.OK);
+        return clientDTO;
     }
 
     @PostMapping("take/{bookId}/{clientId}")
-    public ResponseEntity<BookDTO> takeBook(@PathVariable Long bookId, @PathVariable Long clientId) {
+    public BookDTO takeBook(@PathVariable Long bookId, @PathVariable Long clientId) {
         Book bookById = clientBookFacade.findById(bookId);
         Book book = clientService.takeBook(clientId, bookById);
-        BookDTO bookDTO = BookMapper.INSTANCE.toBookDTO(book);
-        return new ResponseEntity<>(bookDTO, HttpStatus.OK);
+        return bookMapper.toBookDTO(book);
     }
 
     @PostMapping("return/{bookId}/{clientId}")
-    public ResponseEntity<BookDTO> returnBook(@PathVariable Long bookId, @PathVariable Long clientId) {
+    public BookDTO returnBook(@PathVariable Long bookId, @PathVariable Long clientId) {
         Book bookById = clientBookFacade.findById(bookId);
         Book book = clientService.returnBook(clientId, bookById);
-        BookDTO bookDTO = BookMapper.INSTANCE.toBookDTO(book);
-        return new ResponseEntity<>(bookDTO, HttpStatus.OK);
+        return bookMapper.toBookDTO(book);
     }
 }

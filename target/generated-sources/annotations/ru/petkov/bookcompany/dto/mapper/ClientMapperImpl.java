@@ -3,14 +3,16 @@ package ru.petkov.bookcompany.dto.mapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
 import ru.petkov.bookcompany.dto.ClientDTO;
 import ru.petkov.bookcompany.entity.Client;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-07-14T09:46:01+1000",
+    date = "2024-07-14T19:03:51+1000",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 19.0.2 (Private Build)"
 )
+@Component
 public class ClientMapperImpl implements ClientMapper {
 
     @Override

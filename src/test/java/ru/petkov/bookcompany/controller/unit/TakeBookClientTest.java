@@ -13,7 +13,8 @@ import ru.petkov.bookcompany.service.facade.ClientBookFacade;
 
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class TakeBookClientTest {
@@ -37,12 +38,13 @@ public class TakeBookClientTest {
         book.setTitle("title");
         book.setAuthor("author");
 
-        when(clientBookFacade.createBook(book)).thenReturn(book);
+        when(clientBookFacade.updateBook(book)).thenReturn(book);
         when(clientRepository.findById(client.getClientId())).thenReturn(Optional.of(client));
 
-        clientService.takeBook(client.getClientId(), book);
-        clientRepository.save(client);
-        verify(clientRepository, times(1)).save(client);
+        Book book1 = clientService.takeBook(client.getClientId(), book);
+
+        assertEquals("title", book1.getTitle());
+        assertEquals("author", book1.getAuthor());
 
     }
 }
