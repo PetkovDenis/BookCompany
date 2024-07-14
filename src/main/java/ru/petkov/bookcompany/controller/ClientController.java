@@ -21,10 +21,13 @@ import java.util.List;
 @RequestMapping("/client")
 public class ClientController {
 
-    @Autowired
-    private ClientService clientService;
-    @Autowired
-    private ClientBookFacade clientBookFacade;
+    private final ClientService clientService;
+    private final ClientBookFacade clientBookFacade;
+
+    public ClientController(ClientService clientService, ClientBookFacade clientBookFacade) {
+        this.clientService = clientService;
+        this.clientBookFacade = clientBookFacade;
+    }
 
     @PostMapping("/create")
     public ResponseEntity<ClientDTO> save(@RequestBody ClientDTO clientDTO) {

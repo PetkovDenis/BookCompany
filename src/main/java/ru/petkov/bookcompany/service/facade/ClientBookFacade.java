@@ -7,8 +7,13 @@ import ru.petkov.bookcompany.service.book.BookService;
 
 @Service
 public class ClientBookFacade {
-    @Autowired
-    private BookService bookService;
+
+    private final BookService bookService;
+
+    public ClientBookFacade(BookService bookService) {
+        this.bookService = bookService;
+    }
+
 
     public Book createBook(Book book) {
         return bookService.createBook(book);

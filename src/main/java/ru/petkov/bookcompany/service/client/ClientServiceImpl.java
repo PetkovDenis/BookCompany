@@ -13,10 +13,14 @@ import java.util.List;
 @Service
 public class ClientServiceImpl implements ClientService {
 
-    @Autowired
-    private ClientRepository clientRepository;
-    @Autowired
-    private ClientBookFacade clientBookFacade;
+    private final ClientRepository clientRepository;
+
+    private final ClientBookFacade clientBookFacade;
+
+    public ClientServiceImpl(ClientRepository clientRepository, ClientBookFacade clientBookFacade) {
+        this.clientRepository = clientRepository;
+        this.clientBookFacade = clientBookFacade;
+    }
 
     @Override
     public List<Client> allClients() {

@@ -8,7 +8,7 @@ import ru.petkov.bookcompany.entity.Client;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-07-10T09:43:44+1000",
+    date = "2024-07-14T09:46:01+1000",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 19.0.2 (Private Build)"
 )
 public class ClientMapperImpl implements ClientMapper {

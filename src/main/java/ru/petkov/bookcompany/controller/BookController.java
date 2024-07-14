@@ -18,10 +18,13 @@ import java.util.UUID;
 @RequestMapping("/book")
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
-    @Autowired
-    private RandomIdFeign randomId;
+    private final BookService bookService;
+    private final RandomIdFeign randomId;
+
+    public BookController(BookService bookService, RandomIdFeign randomId) {
+        this.bookService = bookService;
+        this.randomId = randomId;
+    }
 
     @GetMapping("/list")
     public ResponseEntity<List<BookDTO>> getAllBooks() {
