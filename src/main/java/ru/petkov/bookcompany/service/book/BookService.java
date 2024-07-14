@@ -18,4 +18,6 @@ public interface BookService {
 
     Book findBookById(Long id);
 
+    List<Book> findBooksByClientId(Long clientId);
+
 }

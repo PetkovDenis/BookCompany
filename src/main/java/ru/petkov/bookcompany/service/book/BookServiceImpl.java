@@ -10,6 +10,7 @@ import java.util.Optional;
 @Service
 public class BookServiceImpl implements BookService {
 
+
     private final BookRepository bookRepository;
 
     public BookServiceImpl(BookRepository bookRepository) {
@@ -46,5 +47,10 @@ public class BookServiceImpl implements BookService {
         bookById.setClient(book.getClient());
         bookRepository.save(bookById);
         return bookById;
+    }
+
+    @Override
+    public List<Book> findBooksByClientId(Long clientId) {
+       return bookRepository.findBooksByClient_ClientId(clientId);
     }
 }

@@ -60,7 +60,7 @@ public class BookController {
 
     @PostMapping("/borrowed/{clientId}")
     public List<BookDTO> getListBorrowedBooks(@PathVariable Long clientId) {
-        List<Book> books = bookService.allBooks().stream().filter(book -> book.getClient().getClientId().equals(clientId)).toList();
-        return bookMapper.toBookDTOList(books);
+        List<Book> booksByClientId = bookService.findBooksByClientId(clientId);
+        return bookMapper.toBookDTOList(booksByClientId);
     }
 }
