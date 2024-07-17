@@ -28,8 +28,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client createClient(Client client) {
-        clientRepository.save(client);
-        return client;
+        return clientRepository.save(client);
     }
 
     @Override
@@ -51,16 +50,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Book takeBook(Long clientId, Book book) {
+    public Book takeBook(Long clientId, Long bookId) {
         Client byId = clientRepository.findById(clientId).orElseThrow();
-        book.setClient(byId);
-        clientBookFacade.updateBook(book);
-        return book;
+        return clientBookFacade.takeBook(byId, bookId);
     }
 
     @Override
-    public Book returnBook(Long clientId, Book book) {
-        book.setClient(null);
-        return clientBookFacade.updateBook(book);
+    public Book returnBook(Long bookId) {
+        return clientBookFacade.returnBook(bookId);
     }
 }

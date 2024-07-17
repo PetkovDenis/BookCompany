@@ -1,5 +1,6 @@
 package ru.petkov.bookcompany.controller.integration;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +43,19 @@ public class ReturnBookTest {
         book.setClient(client);
         bookService.updateBook(book);
 
-        clientService.takeBook(client.getClientId(), book);
+        clientService.takeBook(client.getClientId(), book.getId());
     }
 
     @Test
-    public void testListBook() throws Exception {
-        mockMvc.perform(post("http://localhost:8080/client/return/1/1")
+    public void testReturnBook() throws Exception {
+        mockMvc.perform(post("http://localhost:8080/client/return/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @AfterEach
+    public void clearEntities() {
+        bookService.deleteBook(1L);
+        clientService.deleteClient(1L);
     }
 }

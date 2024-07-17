@@ -27,7 +27,7 @@ public class TakeBookClientTest {
     private ClientServiceImpl clientService;
 
     @Test
-    void takeBookClient() {
+    void testTakeBookClient() {
 
         Client client = new Client();
         client.setClientId(100L);
@@ -38,10 +38,10 @@ public class TakeBookClientTest {
         book.setTitle("title");
         book.setAuthor("author");
 
-        when(clientBookFacade.updateBook(book)).thenReturn(book);
+        when(clientBookFacade.takeBook(client, book.getId())).thenReturn(book);
         when(clientRepository.findById(client.getClientId())).thenReturn(Optional.of(client));
 
-        Book book1 = clientService.takeBook(client.getClientId(), book);
+        Book book1 = clientService.takeBook(clientRepository.findById(client.getClientId()).get().getClientId(), book.getId());
 
         assertEquals("title", book1.getTitle());
         assertEquals("author", book1.getAuthor());

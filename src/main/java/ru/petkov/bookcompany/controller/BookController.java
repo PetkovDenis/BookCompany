@@ -1,5 +1,6 @@
 package ru.petkov.bookcompany.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import ru.petkov.bookcompany.dto.BookDTO;
@@ -13,17 +14,13 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/book")
+@RequiredArgsConstructor
 public class BookController {
 
     private final BookService bookService;
     private final RandomIdFeign randomId;
     private final BookMapper bookMapper;
 
-    public BookController(BookService bookService, RandomIdFeign randomId, BookMapper bookMapper) {
-        this.bookService = bookService;
-        this.randomId = randomId;
-        this.bookMapper = bookMapper;
-    }
 
     @GetMapping("/list")
     public List<BookDTO> getAllBooks() {
@@ -31,27 +28,24 @@ public class BookController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteBook(@PathVariable Long id) {
+    public void deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
-        return "Book was deleted";
     }
 
     @PostMapping("/create")
     public BookDTO createBook(@RequestBody BookDTO bookDTO) {
         Book book = bookMapper.toBook(bookDTO);
         book.setRandomId(getRandomId());
-        bookService.createBook(book);
-        return bookDTO;
+        return bookMapper.toBookDTO(bookService.createBook(book));
     }
 
     @PostMapping("/update")
     public BookDTO updateBook(@RequestBody BookDTO bookDTO) {
         Book book = bookMapper.toBook(bookDTO);
-        bookService.updateBook(book);
-        return bookDTO;
+        return bookMapper.toBookDTO(bookService.updateBook(book));
     }
 
-    public UUID getRandomId() {
+    private UUID getRandomId() {
         String json = randomId.getRandomId();
         JSONObject object = new JSONObject(json);
         String uuid = object.get("uuid").toString();

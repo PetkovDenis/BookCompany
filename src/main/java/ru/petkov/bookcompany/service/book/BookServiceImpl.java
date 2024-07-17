@@ -5,11 +5,9 @@ import ru.petkov.bookcompany.entity.Book;
 import ru.petkov.bookcompany.repository.book.BookRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService {
-
 
     private final BookRepository bookRepository;
 
@@ -24,8 +22,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book createBook(Book book) {
-        bookRepository.save(book);
-        return book;
+        return bookRepository.save(book);
     }
 
     @Override
@@ -35,8 +32,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book findBookById(Long id) {
-        Optional<Book> byId = bookRepository.findById(id);
-        return byId.orElseThrow();
+        return bookRepository.findById(id).orElseThrow();
     }
 
     @Override
@@ -51,6 +47,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findBooksByClientId(Long clientId) {
-       return bookRepository.findBooksByClient_ClientId(clientId);
+        return bookRepository.findBooksByClient_ClientId(clientId);
     }
 }

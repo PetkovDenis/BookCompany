@@ -23,7 +23,7 @@ public class CreateBookTest {
     private BookRepository bookRepository;
 
     @Test
-    public void createBook() {
+    public void testCreateBook() {
 
         Book book = new Book();
         book.setAuthor("Steven");
@@ -31,7 +31,7 @@ public class CreateBookTest {
 
         when(bookRepository.save(book)).thenReturn(book);
 
-        Book savedBook = bookService.createBook(book);
+        Book savedBook = bookService.createBook(bookRepository.save(book));
 
         assertThat(savedBook).isNotNull();
         assertThat(savedBook.getTitle()).isEqualTo("it");
