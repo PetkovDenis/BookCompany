@@ -11,15 +11,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import ru.petkov.bookcompany.dto.BookDTO;
 import ru.petkov.bookcompany.entity.Book;
 import ru.petkov.bookcompany.entity.Client;
 import ru.petkov.bookcompany.service.book.BookService;
 import ru.petkov.bookcompany.service.client.ClientService;
 import ru.petkov.bookcompany.service.facade.ClientBookFacade;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -58,10 +55,10 @@ public class ReturnBookTest {
     }
 
     @Test
-    public void returnBook_shouldReturnBookTakenClient() throws Exception {
+    public void returnBook() throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("http://localhost:8080/client/return/1")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andReturn();
+                        .andExpect(status().isOk()).andReturn();
 
         String contentAsString = mvcResult.getResponse().getContentAsString();
         BookDTO result = new ObjectMapper().readValue(contentAsString, new TypeReference<>() {});

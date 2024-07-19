@@ -57,7 +57,7 @@ public class BorrowedBookTest {
     }
 
     @Test
-    public void booksBorrowedClient_shouldReturnBooksBorrowedClient() throws Exception {
+    public void returnBookBorrowedClient() throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("http://localhost:8080/book/borrowed/" + clientService.allClients().get(0).getClientId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

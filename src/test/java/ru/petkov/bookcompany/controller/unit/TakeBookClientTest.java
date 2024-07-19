@@ -26,7 +26,7 @@ public class TakeBookClientTest {
     private ClientBookFacade clientBookFacade;
 
     @Test
-    void takeBookClient_shouldTakeBookClient() {
+    void takeBookClient() {
 
         Client client = new Client();
         client.setClientId(1L);

@@ -22,7 +22,7 @@ public class CreateBookTest {
     private BookRepository bookRepository;
 
     @Test
-    public void createBook_shouldCreateBook() {
+    public void createBook() {
 
         Book book = new Book();
         book.setAuthor("Steven");
