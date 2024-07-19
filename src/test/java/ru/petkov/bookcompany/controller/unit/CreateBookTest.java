@@ -18,7 +18,6 @@ public class CreateBookTest {
 
     @InjectMocks
     private BookServiceImpl bookService;
-
     @Mock
     private BookRepository bookRepository;
 

@@ -11,12 +11,12 @@ import ru.petkov.bookcompany.service.book.BookServiceImpl;
 import ru.petkov.bookcompany.service.client.ClientServiceImpl;
 import ru.petkov.bookcompany.service.facade.ClientBookFacade;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class TakeBookClientTest {
-
 
     @Mock
     private ClientServiceImpl clientService;
@@ -24,7 +24,6 @@ public class TakeBookClientTest {
     private BookServiceImpl bookService;
     @InjectMocks
     private ClientBookFacade clientBookFacade;
-
 
     @Test
     void takeBookClient_shouldTakeBookClient() {
@@ -48,5 +47,6 @@ public class TakeBookClientTest {
         assertEquals("title", result.getTitle());
         assertEquals("author", result.getAuthor());
 
+        assertThat(result.getClient()).isEqualTo(client);
     }
 }
