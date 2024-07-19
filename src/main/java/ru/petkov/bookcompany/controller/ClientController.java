@@ -8,6 +8,7 @@ import ru.petkov.bookcompany.dto.mapper.BookMapper;
 import ru.petkov.bookcompany.dto.mapper.ClientMapper;
 import ru.petkov.bookcompany.entity.Client;
 import ru.petkov.bookcompany.service.client.ClientService;
+import ru.petkov.bookcompany.service.facade.ClientBookFacade;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class ClientController {
     private final ClientService clientService;
     private final ClientMapper clientMapper;
     private final BookMapper bookMapper;
+    private final ClientBookFacade clientBookFacade;
 
     @PostMapping("/create")
     public ClientDTO save(@RequestBody ClientDTO clientDTO) {
@@ -46,11 +48,11 @@ public class ClientController {
 
     @PostMapping("take/{bookId}/{clientId}")
     public BookDTO takeBook(@PathVariable Long bookId, @PathVariable Long clientId) {
-        return bookMapper.toBookDTO(clientService.takeBook(clientId, bookId));
+        return bookMapper.toBookDTO(clientBookFacade.takeBook(clientId, bookId));
     }
 
     @PostMapping("return/{bookId}")
     public BookDTO returnBook(@PathVariable Long bookId) {
-        return bookMapper.toBookDTO(clientService.returnBook(bookId));
+        return bookMapper.toBookDTO(clientBookFacade.returnBook(bookId));
     }
 }

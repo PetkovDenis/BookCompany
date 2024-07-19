@@ -1,5 +1,7 @@
 package ru.petkov.bookcompany.controller.integration;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,10 +12,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import ru.petkov.bookcompany.dto.BookDTO;
 import ru.petkov.bookcompany.entity.Book;
 import ru.petkov.bookcompany.entity.Client;
 import ru.petkov.bookcompany.service.book.BookService;
 import ru.petkov.bookcompany.service.client.ClientService;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,7 +40,7 @@ public class BorrowedBookTest {
     private ClientService clientService;
 
     @BeforeEach
-    public void init() {
+    public void setUp() {
 
         Book book = new Book();
         book.setTitle("title5");
@@ -51,22 +57,25 @@ public class BorrowedBookTest {
     }
 
     @Test
-    public void testBorrowedBooks() throws Exception {
-        mockMvc.perform(post("http://localhost:8080/book/borrowed/2")
+    public void booksBorrowedClient_shouldReturnBooksBorrowedClient() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(post("http://localhost:8080/book/borrowed/" + clientService.allClients().get(0).getClientId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title").value("title5"))
                 .andExpect(jsonPath("$[0].author").value("Steven"))
                 .andReturn();
 
-        assertThat(bookService.findBookById(2L).getTitle()).isEqualTo("title5");
-        assertThat(clientService.findClientById(2L).getFirstName()).isEqualTo("Bob");
+        String contentAsString = mvcResult.getResponse().getContentAsString();
+        List<BookDTO> result = new ObjectMapper().readValue(contentAsString, new TypeReference<>() {});
+
+        assertThat(bookService.allBooks().get(0).getTitle()).isEqualTo(result.get(0).getTitle());
+        assertThat(bookService.allBooks().get(0).getAuthor()).isEqualTo(result.get(0).getAuthor());
 
     }
 
     @AfterEach
-    public void clearEntities() {
-        bookService.deleteBook(2L);
-        clientService.deleteClient(2L);
+    public void clearEntitiesInServices() {
+        bookService.deleteBook(1L);
+        clientService.deleteClient(1L);
     }
 }

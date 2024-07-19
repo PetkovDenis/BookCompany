@@ -1,24 +1,19 @@
 package ru.petkov.bookcompany.service.client;
 
-
 import org.springframework.stereotype.Service;
-import ru.petkov.bookcompany.entity.Book;
 import ru.petkov.bookcompany.entity.Client;
 import ru.petkov.bookcompany.repository.client.ClientRepository;
-import ru.petkov.bookcompany.service.facade.ClientBookFacade;
 
 import java.util.List;
 
 @Service
+
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
 
-    private final ClientBookFacade clientBookFacade;
-
-    public ClientServiceImpl(ClientRepository clientRepository, ClientBookFacade clientBookFacade) {
+    public ClientServiceImpl(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
-        this.clientBookFacade = clientBookFacade;
     }
 
     @Override
@@ -47,16 +42,5 @@ public class ClientServiceImpl implements ClientService {
         clientById.setFirstName(client.getFirstName());
         clientById.setLastName(client.getLastName());
         return clientById;
-    }
-
-    @Override
-    public Book takeBook(Long clientId, Long bookId) {
-        Client byId = clientRepository.findById(clientId).orElseThrow();
-        return clientBookFacade.takeBook(byId, bookId);
-    }
-
-    @Override
-    public Book returnBook(Long bookId) {
-        return clientBookFacade.returnBook(bookId);
     }
 }

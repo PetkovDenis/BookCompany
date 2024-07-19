@@ -1,6 +1,5 @@
 package ru.petkov.bookcompany.service.client;
 
-import ru.petkov.bookcompany.entity.Book;
 import ru.petkov.bookcompany.entity.Client;
 
 import java.util.List;
@@ -17,8 +16,8 @@ public interface ClientService {
 
     Client findClientById(Long id);
 
-    Book takeBook(Long clientId, Long bookId);
-
-    Book returnBook(Long bookId);
+//    Book takeBook(Long clientId, Long bookId);
+//
+//    Book returnBook(Long bookId);
 
 }

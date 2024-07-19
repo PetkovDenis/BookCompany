@@ -7,11 +7,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.petkov.bookcompany.entity.Book;
 import ru.petkov.bookcompany.entity.Client;
-import ru.petkov.bookcompany.repository.client.ClientRepository;
+import ru.petkov.bookcompany.service.book.BookServiceImpl;
 import ru.petkov.bookcompany.service.client.ClientServiceImpl;
 import ru.petkov.bookcompany.service.facade.ClientBookFacade;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -19,32 +17,36 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class TakeBookClientTest {
 
+
     @Mock
-    private ClientRepository clientRepository;
-    @Mock
-    private ClientBookFacade clientBookFacade;
-    @InjectMocks
     private ClientServiceImpl clientService;
+    @Mock
+    private BookServiceImpl bookService;
+    @InjectMocks
+    private ClientBookFacade clientBookFacade;
+
 
     @Test
-    void testTakeBookClient() {
+    void takeBookClient_shouldTakeBookClient() {
 
         Client client = new Client();
-        client.setClientId(100L);
+        client.setClientId(1L);
         client.setFirstName("bob");
         client.setLastName("mob");
 
         Book book = new Book();
+        book.setId(1L);
         book.setTitle("title");
         book.setAuthor("author");
 
-        when(clientBookFacade.takeBook(client, book.getId())).thenReturn(book);
-        when(clientRepository.findById(client.getClientId())).thenReturn(Optional.of(client));
+        when(clientService.findClientById(1L)).thenReturn(client);
+        when(bookService.findBookById(1L)).thenReturn(book);
+        when(clientBookFacade.takeBook(client.getClientId(), book.getId())).thenReturn(book);
 
-        Book book1 = clientService.takeBook(clientRepository.findById(client.getClientId()).get().getClientId(), book.getId());
+        Book result = clientBookFacade.takeBook(client.getClientId(), book.getId());
 
-        assertEquals("title", book1.getTitle());
-        assertEquals("author", book1.getAuthor());
+        assertEquals("title", result.getTitle());
+        assertEquals("author", result.getAuthor());
 
     }
 }

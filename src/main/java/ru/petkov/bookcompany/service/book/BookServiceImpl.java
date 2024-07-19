@@ -49,4 +49,6 @@ public class BookServiceImpl implements BookService {
     public List<Book> findBooksByClientId(Long clientId) {
         return bookRepository.findBooksByClient_ClientId(clientId);
     }
+
 }
+
