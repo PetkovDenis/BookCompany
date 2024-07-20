@@ -51,17 +51,17 @@ public class ReturnBookTest {
         book.setClient(client);
         bookService.updateBook(book);
 
-        clientBookFacade.returnBook(book.getId());
     }
 
     @Test
     public void returnBook() throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("http://localhost:8080/client/return/1")
                         .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk()).andReturn();
+                .andExpect(status().isOk()).andReturn();
 
         String contentAsString = mvcResult.getResponse().getContentAsString();
-        BookDTO result = new ObjectMapper().readValue(contentAsString, new TypeReference<>() {});
+        BookDTO result = new ObjectMapper().readValue(contentAsString, new TypeReference<>() {
+        });
 
         assertThat(bookService.allBooks().get(0).getAuthor()).isEqualTo(result.getAuthor());
         assertThat(bookService.allBooks().get(0).getTitle()).isEqualTo(result.getTitle());

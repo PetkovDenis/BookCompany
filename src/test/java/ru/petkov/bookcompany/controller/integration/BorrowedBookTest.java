@@ -66,7 +66,8 @@ public class BorrowedBookTest {
                 .andReturn();
 
         String contentAsString = mvcResult.getResponse().getContentAsString();
-        List<BookDTO> result = new ObjectMapper().readValue(contentAsString, new TypeReference<>() {});
+        List<BookDTO> result = new ObjectMapper().readValue(contentAsString, new TypeReference<>() {
+        });
 
         assertThat(bookService.allBooks().get(0).getTitle()).isEqualTo(result.get(0).getTitle());
         assertThat(bookService.allBooks().get(0).getAuthor()).isEqualTo(result.get(0).getAuthor());

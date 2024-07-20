@@ -16,8 +16,4 @@ public interface ClientService {
 
     Client findClientById(Long id);
 
-//    Book takeBook(Long clientId, Long bookId);
-//
-//    Book returnBook(Long bookId);
-
 }
