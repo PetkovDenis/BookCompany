@@ -52,8 +52,8 @@ public class TakeBookClientTest {
         verify(bookService, times(2)).findBookById(1L);
         verify(clientService, times(2)).findClientById(1L);
 
-        assertEquals("title", result.getTitle());
-        assertEquals("author", result.getAuthor());
+        assertEquals(title, result.getTitle());
+        assertEquals(author, result.getAuthor());
 
     }
 }
